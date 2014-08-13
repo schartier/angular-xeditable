@@ -1,7 +1,7 @@
 /*!
 angular-xeditable - 0.1.8
 Edit-in-place for angular.js
-Build date: 2014-01-10 
+Build date: 2014-08-13 
 */
 /**
  * Angular-xeditable module 
@@ -435,20 +435,6 @@ angular.module('xeditable').factory('editableController',
       $scope.$parent.$watch($attrs[self.directiveName], function(newVal, oldVal) {
         self.handleEmpty();
       });
-
-
-//      debugger;
-      self.elem.bind('focus', function(e){
-//        self.show();
-//        self.activate();
-//        setTimeout(function(){
-          if (!self.scope.$form.$visible) {
-            self.scope.$apply(function(){
-              self.scope.$form.$show();
-            });
-          }
-//        }, 1000);
-      });
     };
 
     self.render = function() {
@@ -586,13 +572,6 @@ angular.module('xeditable').factory('editableController',
     Called after show to attach listeners
     */
     self.addListeners = function() {
-
-      self.inputEl.bind('focusout', function(e){
-        self.scope.$apply(function() {
-          self.scope.$form.$submit();
-        });
-      });
-
       // bind keyup for `escape`
       self.inputEl.bind('keyup', function(e) {
           if(!self.single) {
