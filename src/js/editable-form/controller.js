@@ -2,8 +2,8 @@
 Returns editableForm controller
 */
 angular.module('xeditable').factory('editableFormController', 
-  ['$parse', '$document', '$rootScope', 'editablePromiseCollection', 'editableUtils',
-  function($parse, $document, $rootScope, editablePromiseCollection, editableUtils) {
+  ['$parse', '$document', '$rootScope', 'editablePromiseCollection', 'editableUtils', 'safeApply',
+  function($parse, $document, $rootScope, editablePromiseCollection, editableUtils, safeApply) {
 
   // array of opened editable forms
   var shown = [];
@@ -40,7 +40,7 @@ angular.module('xeditable').factory('editableFormController',
     }
 
     if (toCancel.length || toSubmit.length) {
-      $rootScope.$apply(function() {
+      safeApply($rootScope, function() {
         angular.forEach(toCancel, function(v){ v.$cancel(); });
         angular.forEach(toSubmit, function(v){ v.$submit(); });
       });

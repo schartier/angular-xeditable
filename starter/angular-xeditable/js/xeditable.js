@@ -1,7 +1,7 @@
 /*!
 angular-xeditable - 0.1.8
 Edit-in-place for angular.js
-Build date: 2014-08-13 
+Build date: 2014-09-09 
 */
 /**
  * Angular-xeditable module 
@@ -9,6 +9,18 @@ Build date: 2014-08-13
  */
 angular.module('xeditable', [])
 
+.factory('safeApply', function(){
+    return function(scope, fn) {
+        var phase = scope.$$phase;
+        if (phase === '$apply' || phase === '$digest') {
+            if (fn && (typeof (fn) === 'function')) {
+                fn();
+            }
+        } else {
+            scope.$apply(fn);
+        }
+    };
+})
 
 /**
  * Default options. 
@@ -101,8 +113,8 @@ angular.module('xeditable').directive('editableBstime', ['editableDirectiveFacto
     });
 }]);
 //checkbox
-angular.module('xeditable').directive('editableCheckbox', ['editableDirectiveFactory',
-  function(editableDirectiveFactory) {
+angular.module('xeditable').directive('editableCheckbox', ['editableDirectiveFactory', 'safeApply',
+  function(editableDirectiveFactory, safeApply) {
     return editableDirectiveFactory({
       directiveName: 'editableCheckbox',
       inputTpl: '<input type="checkbox">',
@@ -117,7 +129,7 @@ angular.module('xeditable').directive('editableCheckbox', ['editableDirectiveFac
         var self = this;
         self.inputEl.bind('change', function() {
           setTimeout(function() {
-            self.scope.$apply(function() {
+            safeApply(self.scope, function() {
               self.scope.$form.$submit();
             });
           }, 500);
@@ -189,7 +201,8 @@ Input types: text|email|tel|number|url|search|color|date|datetime|time|month|wee
 angular.module('xeditable').directive('editableRadiolist', [
   'editableDirectiveFactory',
   'editableNgOptionsParser',
-  function(editableDirectiveFactory, editableNgOptionsParser) {
+  'safeApply',
+  function(editableDirectiveFactory, editableNgOptionsParser, safeApply) {
     return editableDirectiveFactory({
       directiveName: 'editableRadiolist',
       inputTpl: '<span></span>',
@@ -208,7 +221,7 @@ angular.module('xeditable').directive('editableRadiolist', [
         var self = this;
         self.inputEl.bind('change', function() {
           setTimeout(function() {
-            self.scope.$apply(function() {
+            safeApply(self.scope, function() {
               self.scope.$form.$submit();
             });
           }, 500);
@@ -217,15 +230,15 @@ angular.module('xeditable').directive('editableRadiolist', [
     });
 }]);
 //select
-angular.module('xeditable').directive('editableSelect', ['editableDirectiveFactory',
-  function(editableDirectiveFactory) {
+angular.module('xeditable').directive('editableSelect', ['editableDirectiveFactory', 'safeApply',
+  function(editableDirectiveFactory, safeApply) {
     return editableDirectiveFactory({
       directiveName: 'editableSelect',
       inputTpl: '<select></select>',
       autosubmit: function() {
         var self = this;
         self.inputEl.bind('change', function() {
-          self.scope.$apply(function() {
+          safeApply(self.scope, function() {
             self.scope.$form.$submit();
           });
         });
@@ -233,8 +246,8 @@ angular.module('xeditable').directive('editableSelect', ['editableDirectiveFacto
     });
 }]);
 //textarea
-angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFactory',
-  function(editableDirectiveFactory) {
+angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFactory', 'safeApply',
+  function(editableDirectiveFactory, safeApply) {
     return editableDirectiveFactory({
       directiveName: 'editableTextarea',
       inputTpl: '<textarea></textarea>',
@@ -250,7 +263,7 @@ angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFac
         var self = this;
         self.inputEl.bind('keydown', function(e) {
           if ((e.ctrlKey || e.metaKey) && (e.keyCode === 13)) {
-            self.scope.$apply(function() {
+            safeApply(self.scope, function() {
               self.scope.$form.$submit();
             });
           }
@@ -269,8 +282,8 @@ angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFac
  TODO: this file should be refactored to work more clear without closures!
  */
 angular.module('xeditable').factory('editableController',
-    ['$q', 'editableUtils',
-        function ($q, editableUtils) {
+    ['$q', 'editableUtils', 'safeApply',
+        function ($q, editableUtils, safeApply) {
 
             //EditableController function
             EditableController.$inject = ['$scope', '$attrs', '$element', '$parse', 'editableThemes', 'editableOptions', '$rootScope', '$compile', '$q'];
@@ -338,7 +351,7 @@ angular.module('xeditable').factory('editableController',
                 self.init = function (single) {
                     self.elem.bind('focus', function (e) {
                         if (!self.scope.$form.$visible) {
-                            self.scope.$apply(function () {
+                            safeApply(self.scope, function () {
                                 self.scope.$form.$show();
                             });
                         }
@@ -455,7 +468,7 @@ angular.module('xeditable').factory('editableController',
                     });
 
                     self.elem.bind('focus', function (e) {
-                        $scope.$apply(function () {
+                        safeApply($scope, function () {
                             self.activate();
                         });
                     });
@@ -597,7 +610,7 @@ angular.module('xeditable').factory('editableController',
                  */
                 self.addListeners = function () {
                     self.inputEl.bind('focusout', function (e) {
-                        self.scope.$apply(function () {
+                        safeApply(self.scope, function () {
                             self.scope.$form.$submit();
                         });
                     });
@@ -612,7 +625,7 @@ angular.module('xeditable').factory('editableController',
                         switch (e.keyCode) {
                             // hide on `escape` press
                             case 27:
-                                self.scope.$apply(function () {
+                                safeApply(self.scope, function () {
                                     self.scope.$form.$cancel();
                                 });
                                 break;
@@ -748,8 +761,8 @@ Inside it does several things:
 Depends on: editableController, editableFormFactory
 */
 angular.module('xeditable').factory('editableDirectiveFactory',
-['$parse', '$compile', 'editableThemes', '$rootScope', '$document', 'editableController', 'editableFormController',
-function($parse, $compile, editableThemes, $rootScope, $document, editableController, editableFormController) {
+['$parse', '$compile', 'editableThemes', '$rootScope', '$document', 'editableController', 'editableFormController', 'safeApply',
+function($parse, $compile, editableThemes, $rootScope, $document, editableController, editableFormController, safeApply) {
 
   //directive object
   return function(overwrites) {
@@ -856,7 +869,7 @@ function($parse, $compile, editableThemes, $rootScope, $document, editableContro
             elem.bind('click', function(e) {
               e.preventDefault();
               e.editable = eCtrl;
-              scope.$apply(function(){
+              safeApply(scope, function(){
                 scope.$form.$show();
               });
             });
@@ -872,8 +885,8 @@ function($parse, $compile, editableThemes, $rootScope, $document, editableContro
 Returns editableForm controller
 */
 angular.module('xeditable').factory('editableFormController', 
-  ['$parse', '$document', '$rootScope', 'editablePromiseCollection', 'editableUtils',
-  function($parse, $document, $rootScope, editablePromiseCollection, editableUtils) {
+  ['$parse', '$document', '$rootScope', 'editablePromiseCollection', 'editableUtils', 'safeApply',
+  function($parse, $document, $rootScope, editablePromiseCollection, editableUtils, safeApply) {
 
   // array of opened editable forms
   var shown = [];
@@ -910,7 +923,7 @@ angular.module('xeditable').factory('editableFormController',
     }
 
     if (toCancel.length || toSubmit.length) {
-      $rootScope.$apply(function() {
+      safeApply($rootScope, function() {
         angular.forEach(toCancel, function(v){ v.$cancel(); });
         angular.forEach(toSubmit, function(v){ v.$submit(); });
       });
@@ -1196,8 +1209,8 @@ angular.module('xeditable').factory('editableFormController',
  * @namespace editable-form
  */
 angular.module('xeditable').directive('editableForm',
-  ['$rootScope', '$parse', 'editableFormController', 'editableOptions',
-  function($rootScope, $parse, editableFormController, editableOptions) {
+  ['$rootScope', '$parse', 'editableFormController', 'editableOptions', 'safeApply',
+  function($rootScope, $parse, editableFormController, editableOptions, safeApply) {
     return {
       restrict: 'A',
       require: ['form'],
@@ -1327,7 +1340,7 @@ angular.module('xeditable').directive('editableForm',
 
               elem.bind('submit', function(event) {
                 event.preventDefault();
-                scope.$apply(function() {
+                safeApply(scope, function() {
                   eForm.$submit();
                 });
               });

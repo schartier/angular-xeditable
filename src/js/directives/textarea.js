@@ -1,6 +1,6 @@
 //textarea
-angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFactory',
-  function(editableDirectiveFactory) {
+angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFactory', 'safeApply',
+  function(editableDirectiveFactory, safeApply) {
     return editableDirectiveFactory({
       directiveName: 'editableTextarea',
       inputTpl: '<textarea></textarea>',
@@ -16,7 +16,7 @@ angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFac
         var self = this;
         self.inputEl.bind('keydown', function(e) {
           if ((e.ctrlKey || e.metaKey) && (e.keyCode === 13)) {
-            self.scope.$apply(function() {
+            safeApply(self.scope, function() {
               self.scope.$form.$submit();
             });
           }

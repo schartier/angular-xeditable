@@ -5,8 +5,8 @@
  * @namespace editable-form
  */
 angular.module('xeditable').directive('editableForm',
-  ['$rootScope', '$parse', 'editableFormController', 'editableOptions',
-  function($rootScope, $parse, editableFormController, editableOptions) {
+  ['$rootScope', '$parse', 'editableFormController', 'editableOptions', 'safeApply',
+  function($rootScope, $parse, editableFormController, editableOptions, safeApply) {
     return {
       restrict: 'A',
       require: ['form'],
@@ -136,7 +136,7 @@ angular.module('xeditable').directive('editableForm',
 
               elem.bind('submit', function(event) {
                 event.preventDefault();
-                scope.$apply(function() {
+                safeApply(scope, function() {
                   eForm.$submit();
                 });
               });

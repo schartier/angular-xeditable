@@ -2,7 +2,8 @@
 angular.module('xeditable').directive('editableRadiolist', [
   'editableDirectiveFactory',
   'editableNgOptionsParser',
-  function(editableDirectiveFactory, editableNgOptionsParser) {
+  'safeApply',
+  function(editableDirectiveFactory, editableNgOptionsParser, safeApply) {
     return editableDirectiveFactory({
       directiveName: 'editableRadiolist',
       inputTpl: '<span></span>',
@@ -21,7 +22,7 @@ angular.module('xeditable').directive('editableRadiolist', [
         var self = this;
         self.inputEl.bind('change', function() {
           setTimeout(function() {
-            self.scope.$apply(function() {
+            safeApply(self.scope, function() {
               self.scope.$form.$submit();
             });
           }, 500);

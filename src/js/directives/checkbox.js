@@ -1,6 +1,6 @@
 //checkbox
-angular.module('xeditable').directive('editableCheckbox', ['editableDirectiveFactory',
-  function(editableDirectiveFactory) {
+angular.module('xeditable').directive('editableCheckbox', ['editableDirectiveFactory', 'safeApply',
+  function(editableDirectiveFactory, safeApply) {
     return editableDirectiveFactory({
       directiveName: 'editableCheckbox',
       inputTpl: '<input type="checkbox">',
@@ -15,7 +15,7 @@ angular.module('xeditable').directive('editableCheckbox', ['editableDirectiveFac
         var self = this;
         self.inputEl.bind('change', function() {
           setTimeout(function() {
-            self.scope.$apply(function() {
+            safeApply(self.scope, function() {
               self.scope.$form.$submit();
             });
           }, 500);

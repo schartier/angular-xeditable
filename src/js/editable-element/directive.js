@@ -11,8 +11,8 @@ Inside it does several things:
 Depends on: editableController, editableFormFactory
 */
 angular.module('xeditable').factory('editableDirectiveFactory',
-['$parse', '$compile', 'editableThemes', '$rootScope', '$document', 'editableController', 'editableFormController',
-function($parse, $compile, editableThemes, $rootScope, $document, editableController, editableFormController) {
+['$parse', '$compile', 'editableThemes', '$rootScope', '$document', 'editableController', 'editableFormController', 'safeApply',
+function($parse, $compile, editableThemes, $rootScope, $document, editableController, editableFormController, safeApply) {
 
   //directive object
   return function(overwrites) {
@@ -119,7 +119,7 @@ function($parse, $compile, editableThemes, $rootScope, $document, editableContro
             elem.bind('click', function(e) {
               e.preventDefault();
               e.editable = eCtrl;
-              scope.$apply(function(){
+              safeApply(scope, function(){
                 scope.$form.$show();
               });
             });

@@ -8,8 +8,8 @@
  TODO: this file should be refactored to work more clear without closures!
  */
 angular.module('xeditable').factory('editableController',
-    ['$q', 'editableUtils',
-        function ($q, editableUtils) {
+    ['$q', 'editableUtils', 'safeApply',
+        function ($q, editableUtils, safeApply) {
 
             //EditableController function
             EditableController.$inject = ['$scope', '$attrs', '$element', '$parse', 'editableThemes', 'editableOptions', '$rootScope', '$compile', '$q'];
@@ -77,7 +77,7 @@ angular.module('xeditable').factory('editableController',
                 self.init = function (single) {
                     self.elem.bind('focus', function (e) {
                         if (!self.scope.$form.$visible) {
-                            self.scope.$apply(function () {
+                            safeApply(self.scope, function () {
                                 self.scope.$form.$show();
                             });
                         }
@@ -170,8 +170,18 @@ angular.module('xeditable').factory('editableController',
                      * @memberOf editable-element
                      */
                     if ($attrs.onaftersave) {
-                        self.onaftersave = function () {
-                            return self.catchError($parse($attrs.onaftersave)($scope));
+                        self.onaftersave = function() {            
+                            var toreturn = self.catchError($parse($attrs.onaftersave)($scope));
+                            if($attrs.editableNext) {
+                                angular.element($attrs.editableNext).trigger('focus');
+                            }
+                            return toreturn;
+                        };
+                    } else if($attrs.editableNext) {
+                        self.onaftersave = function() {      
+                            if($attrs.editableNext) {
+                                jQuery($attrs.editableNext).trigger('focus');
+                            }
                         };
                     }
 
@@ -184,7 +194,7 @@ angular.module('xeditable').factory('editableController',
                     });
 
                     self.elem.bind('focus', function (e) {
-                        $scope.$apply(function () {
+                        safeApply($scope, function () {
                             self.activate();
                         });
                     });
@@ -326,7 +336,7 @@ angular.module('xeditable').factory('editableController',
                  */
                 self.addListeners = function () {
                     self.inputEl.bind('focusout', function (e) {
-                        self.scope.$apply(function () {
+                        safeApply(self.scope, function () {
                             self.scope.$form.$submit();
                         });
                     });
@@ -341,7 +351,7 @@ angular.module('xeditable').factory('editableController',
                         switch (e.keyCode) {
                             // hide on `escape` press
                             case 27:
-                                self.scope.$apply(function () {
+                                safeApply(self.scope, function () {
                                     self.scope.$form.$cancel();
                                 });
                                 break;

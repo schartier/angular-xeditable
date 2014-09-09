@@ -4,6 +4,18 @@
  */
 angular.module('xeditable', [])
 
+.factory('safeApply', function(){
+    return function(scope, fn) {
+        var phase = scope.$$phase;
+        if (phase === '$apply' || phase === '$digest') {
+            if (fn && (typeof (fn) === 'function')) {
+                fn();
+            }
+        } else {
+            scope.$apply(fn);
+        }
+    };
+})
 
 /**
  * Default options. 
