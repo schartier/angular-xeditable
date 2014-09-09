@@ -44,6 +44,7 @@ app.run(function(editableOptions) {
 app.controller('Ctrl', function($scope) {
   $scope.user = {
     name: 'awesome user',
-    title: 'test title'
+    title: 'test title',
+    vehicle: 'mercedes'
   };  
 });

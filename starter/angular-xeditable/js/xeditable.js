@@ -431,8 +431,18 @@ angular.module('xeditable').factory('editableController',
                      * @memberOf editable-element
                      */
                     if ($attrs.onaftersave) {
-                        self.onaftersave = function () {
-                            return self.catchError($parse($attrs.onaftersave)($scope));
+                        self.onaftersave = function() {            
+                            var toreturn = self.catchError($parse($attrs.onaftersave)($scope));
+                            if($attrs.editableNext) {
+                                angular.element($attrs.editableNext).trigger('focus');
+                            }
+                            return toreturn;
+                        };
+                    } else if($attrs.editableNext) {
+                        self.onaftersave = function() {      
+                            if($attrs.editableNext) {
+                                jQuery($attrs.editableNext).trigger('focus');
+                            }
                         };
                     }
 

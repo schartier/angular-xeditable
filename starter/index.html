@@ -11,6 +11,8 @@
     <!-- Angular-xeditable -->
     <link href="angular-xeditable/css/xeditable.css" rel="stylesheet">
     <script src="angular-xeditable/js/xeditable.js"></script>
+    <script src="angular-xeditable/js/jquery-2.0.3.js"></script>
+    
     <!-- app.js -->
     <script src="app.js"></script>
 </head>
@@ -18,9 +20,11 @@
 <h1 style="margin-bottom: 20px">Angular-xeditable Starter Template</h1>
 
 <div ng-controller="Ctrl">
-        <a href="#" editable-text="user.name" blur="submit">{{ user.name || "empty" }}</a> <br/>
+        <a href="#" editable-text="user.name" editable-next="#userVehicle" blur="submit">{{ user.name || "empty" }}</a> <br/>
 
-        <a href="#" editable-text="user.title" blur="submit">{{ user.title || "empty" }}</a>
+        <a href="#" editable-text="user.title" blur="submit">{{ user.title || "empty" }}</a> <br/>
+        
+        <a href="#" editable-text="user.vehicle" id="userVehicle" blur="submit">{{ user.vehicle || "empty" }}</a>
 
         <div id="debug" style="margin-top: 30px">
             {{ user | json }}
