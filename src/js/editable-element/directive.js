@@ -116,8 +116,9 @@ function($parse, $compile, editableThemes, $rootScope, $document, editableContro
           // bind click - if no external form defined
           if(!attrs.eForm) {
             elem.addClass('editable-click');
-            elem.bind('click', function(e) {
-              e.preventDefault();
+            elem.bind('mousedown', function(e) {
+              e.stopPropagation();
+              
               e.editable = eCtrl;
               safeApply(scope, function(){
                 scope.$form.$show();

@@ -364,12 +364,14 @@ angular.module('xeditable').factory('editableController',
                     }
 
                     // click - mark element as clicked to exclude in document click handler
-                    self.editorEl.bind('click focus', function (e) {
+                    self.editorEl.bind('mousedown focus', function (e) {
                         // ignore right/middle button click
                         if (e.which !== 1) {
                             return;
                         }
-
+                        
+                        e.stopPropagation();
+                        
                         if (self.scope.$form.$visible) {
                             self.scope.$form._clicked = true;
                         }
