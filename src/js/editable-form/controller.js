@@ -9,7 +9,7 @@ angular.module('xeditable').factory('editableFormController',
   var shown = [];
 
   // bind click to body: cancel|submit|ignore forms
-  $document.bind('click', function(e) {
+  $document.bind('mousedown', function(e) {
     // ignore right/middle button click
     if (e.which !== 1) {
       return;

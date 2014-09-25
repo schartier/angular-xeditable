@@ -116,7 +116,7 @@ function($parse, $compile, editableThemes, $rootScope, $document, editableContro
           // bind click - if no external form defined
           if(!attrs.eForm) {
             elem.addClass('editable-click');
-            elem.bind('mousedown', function(e) {
+            elem.bind('click', function(e) {
               e.stopPropagation();
               
               e.editable = eCtrl;
