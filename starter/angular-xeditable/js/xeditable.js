@@ -876,7 +876,7 @@ function($parse, $compile, editableThemes, $rootScope, $document, editableContro
           // bind click - if no external form defined
           if(!attrs.eForm) {
             elem.addClass('editable-click');
-            elem.bind('mousedown', function(e) {
+            elem.bind('click', function(e) {
               e.stopPropagation();
               
               e.editable = eCtrl;
@@ -903,7 +903,7 @@ angular.module('xeditable').factory('editableFormController',
   var shown = [];
 
   // bind click to body: cancel|submit|ignore forms
-  $document.bind('click', function(e) {
+  $document.bind('mousedown', function(e) {
     // ignore right/middle button click
     if (e.which !== 1) {
       return;
