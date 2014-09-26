@@ -1,7 +1,7 @@
 /*!
 angular-xeditable - 0.2.0
 Edit-in-place for angular.js
-Build date: 2014-09-25 
+Build date: 2014-09-26 
 */
 /**
  * Angular-xeditable module 
@@ -1564,7 +1564,7 @@ angular.module('xeditable').factory('editableThemes', function() {
       noformTpl:    '<span class="editable-wrap"></span>',
       controlsTpl:  '<span class="editable-controls"></span>',
       inputTpl:     '',
-      errorTpl:     ' <span class="fa fa-exclamation-triangle text-danger editable-error" ng-show="$error" tooltip="{{$error}}"></span>',
+      errorTpl:     ' <span class="fa fa-exclamation text-danger editable-error" ng-show="$error" tooltip="{{$error}}"></span>',
       buttonsTpl:   '<span class="editable-buttons"></span>',
       submitTpl:    '<button type="submit">save</button>',
       cancelTpl:    '<button type="button" ng-click="$form.$cancel()">cancel</button>'
@@ -1591,7 +1591,7 @@ angular.module('xeditable').factory('editableThemes', function() {
       noformTpl:   '<span class="editable-wrap"></span>',
       controlsTpl: '<div class="editable-controls form-group" ng-class="{\'has-error\': $error}"></div>',
       inputTpl:    '',
-      errorTpl:    ' <span class="fa fa-exclamation-triangle text-danger editable-error" ng-show="$error" tooltip="{{$error}}"></span>',
+      errorTpl:    ' <span class="fa fa-exclamation text-danger editable-error" ng-show="$error" tooltip="{{$error}}"></span>',
       buttonsTpl:  '<span class="editable-buttons"></span>',
       submitTpl:   '<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>',
       cancelTpl:   '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">'+
