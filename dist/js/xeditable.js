@@ -542,7 +542,7 @@ angular.module('xeditable').factory('editableController',
                         if (self.single) {
                             self.editorEl.attr('editable-form', '$form');
                             // transfer `blur` to form
-                            self.editorEl.attr('blur', self.attrs.blur || editableOptions.blurElem);
+                            self.editorEl.attr('blur', self.attrs.blur || (self.buttons === 'no' ? 'cancel' : editableOptions.blurElem));
                         }
 
                         //apply `postrender` method of theme
