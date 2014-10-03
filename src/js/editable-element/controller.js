@@ -409,7 +409,6 @@ angular.module('xeditable').factory('editableController',
                         });
                         setTimeout(function() {
                             var el = self.inputEl[0];
-                            el.scrollIntoView();
                             if (editableOptions.activate === 'focus' && el.focus) {
                                 el.focus();
                             }
