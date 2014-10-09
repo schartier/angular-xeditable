@@ -224,7 +224,11 @@ angular.module('xeditable').factory('editableController',
                         //build error
                         self.errorEl = angular.element(theme.errorTpl);
                         self.controlsEl.append(self.errorEl);
-
+                        
+                        self.editorEl.css({
+                            height: self.elem.height() + 10
+                        });
+                        
                         //build editor
                         self.editorEl = angular.element(self.single ? theme.formTpl : theme.noformTpl);
                         self.editorEl.append(self.controlsEl);

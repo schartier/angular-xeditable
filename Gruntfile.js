@@ -207,7 +207,7 @@ module.exports = function(grunt) {
   //metatasks
   grunt.registerTask('build', [
     'jshint',
-    'clean',
+//    'clean',
     'cssmin',
     'concat',
     'uglify',

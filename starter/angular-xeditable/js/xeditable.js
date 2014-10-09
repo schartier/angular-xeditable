@@ -1,7 +1,7 @@
 /*!
 angular-xeditable - 0.2.0
 Edit-in-place for angular.js
-Build date: 2014-10-03 
+Build date: 2014-10-09 
 */
 /**
  * Angular-xeditable module 
@@ -498,7 +498,11 @@ angular.module('xeditable').factory('editableController',
                         //build error
                         self.errorEl = angular.element(theme.errorTpl);
                         self.controlsEl.append(self.errorEl);
-
+                        
+                        self.editorEl.css({
+                            height: self.elem.height() + 10
+                        });
+                        
                         //build editor
                         self.editorEl = angular.element(self.single ? theme.formTpl : theme.noformTpl);
                         self.editorEl.append(self.controlsEl);
@@ -683,9 +687,8 @@ angular.module('xeditable').factory('editableController',
                         });
                         setTimeout(function() {
                             var el = self.inputEl[0];
-                            if (editableOptions.activate === 'focus' && el.focus) {
-                                el.focus();
-                            }
+                            
+                            el.focus();
                             if (editableOptions.activate === 'select' && el.select) {
                                 el.select();
                             }
