@@ -499,14 +499,15 @@ angular.module('xeditable').factory('editableController',
                         self.errorEl = angular.element(theme.errorTpl);
                         self.controlsEl.append(self.errorEl);
                         
-                        self.editorEl.css({
-                            height: self.elem.height() + 10
-                        });
                         
                         //build editor
                         self.editorEl = angular.element(self.single ? theme.formTpl : theme.noformTpl);
                         self.editorEl.append(self.controlsEl);
-
+                        
+                        self.editorEl.css({
+                            height: self.elem.height() + 10
+                        });
+                        
                         // transfer `e-*|data-e-*|x-e-*` attributes
                         for (var k in $attrs.$attr) {
                             if (k.length <= 1) {
